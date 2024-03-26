@@ -1,12 +1,17 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:practice_firebase/firebase_options.dart';
+import 'package:practice_firebase/resources/add_data.dart';
 import 'package:practice_firebase/utilis.dart';
 import 'package:firebase_core/firebase_core.dart';
-
+import 'package:practice_firebase/resources/add_data.dart';
 Future<void> main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -28,7 +33,10 @@ final TextEditingController bioController = TextEditingController();
       _image = img;
     });
   }
-void saveProfile(){
+void saveProfile()async{
+    String name = nameController.text;
+    String bio = bioController.text;
+    String resp = await StoreData().saveData(name: name, bio: bio, file: _image!);
 
 }
 
@@ -110,7 +118,7 @@ void saveProfile(){
           ),
         ), // Placeholder for body content
       ),
-      // debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
